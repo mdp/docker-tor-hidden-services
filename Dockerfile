@@ -1,10 +1,10 @@
-FROM patrickod/docker-tor
-MAINTAINER Patrick O'Doherty <p@trickod.com>
+FROM patrickod/tor
+MAINTAINER Mark Percival <m@mdp.im>
 
-RUN mkdir -p /var/lib/tor/hidden-service
-RUN chown -R root:root /var/lib/tor/hidden-service
-RUN chmod -R 600 /var/lib/tor/hidden-service
-VOLUME /var/lib/tor/hidden-service
+RUN mkdir -p /var/lib/tor/hidden_service
+RUN chown -R root:root /var/lib/tor
+RUN chmod -R 600 /var/lib/tor/hidden_service
+VOLUME /var/lib/tor/hidden_service
 
 ADD ./torrc /etc/torrc
 ADD ./start-tor /bin/start-tor

@@ -1,5 +1,7 @@
 # Docker tor hidden services
 
+Lovingly forked from @patrickod
+
 This docker container allows you to easily expose ports on other containers as hidden services on the tor network.
 
 ## Usage
@@ -14,16 +16,16 @@ Running this as a hidden service is as simple as the following two commands
 
 ```bash
 $ docker run -d my-awesome-app
-$ docker run --link my-hidden-web-app:web -d patrickod/docker-tor-hidden-service
+$ docker run --link my-hidden-web-app:web -d mdp/docker-tor-hidden-service
 ```
 
 This will expose port 80 on the hidden service domain and direct it to your linked container.
 
-## Why ?
+### Using your own existing private_key
 
-Two reasons mainly.
-
-The more traffic the tor network has the more resilient it becomes to statistical correlation attacks.
-
-Hidden services are a hugely important feature of the tor network and I wanted to make them more readily accessible to the world. By removing any slight configuration overhead I'm hoping to encourage their widespread use. They're incredibly useful even in situations where anonymity is not the main objective. Using hidden services to break NAT is also a common use case for example
+```bash
+$ sudo chown root:root ~/private_key
+$ sudo chmod 600 ~/private_key
+$ docker run --link my-hidden-web-app:web -v ~/private_key:/var/lib/tor/hidden_service/private_key -d mdp/docker-tor-hidden-service
+```
 
