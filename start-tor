@@ -1,18 +1,28 @@
 #!/bin/bash
 
 USERNAME="toruser"
+USERPATH="/home/toruser"
 REGEX='\([0-9]*\)_TCP=tcp://\([0-9]\{1,3\}\.\)\{3\}\([0-9]\)\{1,3\}\:\([0-9]*\)'
 
 MATCH="$(env | grep -o $REGEX | sed -e "s/_TCP=tcp:\/\// /" -e "s/:/ /" | awk '{ printf "HiddenServicePort %s %s:%s\n", $1, $2, $3 }')"
 
 if [ ! -z "$MATCH" ]; then
-  printf "Routing hidden service to:\n $MATCH";
-  echo "$MATCH" >> /etc/torrc
+  echo "$MATCH" >> "$USERPATH/torrc"
 fi
 
-chown -R $USERNAME:$USERNAME /home/toruser/tor
-chmod -R 600 /home/toruser/tor/hidden_service
+if [ -f /root/hidden_service.key ]; then
+  printf "\nUsing a user supplied private key \n\n"
+  cp /root/hidden_service.key $USERPATH/tor/hidden_service/private_key
+  chmod 600 $USERPATH/tor/hidden_service/private_key
+fi
 
-echo `ls -al /home/toruser`
+# Deal with all the permissions issues for tor
+chown -R $USERNAME:$USERNAME $USERPATH/tor
+chmod 700 $USERPATH/tor/hidden_service
 
-su -c "/usr/bin/tor -f /home/toruser/torrc" -m "$USERNAME"
+
+printf "\n--- Using the following torrc config ---\n"
+cat $USERPATH/torrc
+printf "\n\n -------- \n\n"
+
+su -c "/usr/bin/tor -f $USERPATH/torrc" -m "$USERNAME"

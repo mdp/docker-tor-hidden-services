@@ -16,7 +16,7 @@ Running this as a hidden service is as simple as the following two commands
 
 ```bash
 docker run --name webapp -d my-awesome-app
-docker run --link webapp:web -d mdp/docker-tor-hidden-service
+docker run --link webapp:web -d mpercival/tor-hidden-service
 ```
 
 This will expose port 80 on the hidden service domain and direct it to your linked container.
@@ -24,7 +24,7 @@ This will expose port 80 on the hidden service domain and direct it to your link
 ### Using your own existing private_key
 
 ```bash
-docker run --link webapp:web -v ~/private_key:/home/toruser/tor/hidden_service/private_key -d mdp/docker-tor-hidden-service
+docker run --rm --link webapp:web -v `pwd`/hidden_service_key:/root/hidden_service_key mpercival/tor-hidden-service
 ```
 #### Generate a vanity key
 
