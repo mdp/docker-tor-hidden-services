@@ -38,7 +38,8 @@ Log notice stdout
 
 ## The directory for keeping all the keys/etc. By default, we store
 ## things in $HOME/.tor on Unix, and in Application Data\tor on Windows.
-DataDirectory /var/lib/tor
+DataDirectory /home/toruser/tor
+HiddenServiceDir /home/toruser/tor/hidden_service
 
 ############### This section is just for location-hidden services ###
 
@@ -56,4 +57,3 @@ DataDirectory /var/lib/tor
 #HiddenServicePort 80 127.0.0.1:80
 #HiddenServicePort 22 127.0.0.1:22
 
-HiddenServiceDir /var/lib/tor/hidden_service

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+USERNAME="toruser"
 REGEX='\([0-9]*\)_TCP=tcp://\([0-9]\{1,3\}\.\)\{3\}\([0-9]\)\{1,3\}\:\([0-9]*\)'
 
 MATCH="$(env | grep -o $REGEX | sed -e "s/_TCP=tcp:\/\// /" -e "s/:/ /" | awk '{ printf "HiddenServicePort %s %s:%s\n", $1, $2, $3 }')"
@@ -9,4 +10,9 @@ if [ ! -z "$MATCH" ]; then
   echo "$MATCH" >> /etc/torrc
 fi
 
-/usr/bin/tor -f /etc/torrc
+chown -R $USERNAME:$USERNAME /home/toruser/tor
+chmod -R 600 /home/toruser/tor/hidden_service
+
+echo `ls -al /home/toruser`
+
+su -c "/usr/bin/tor -f /home/toruser/torrc" -m "$USERNAME"
